@@ -55,7 +55,7 @@ class JSONField(TextField):
 def send_js():
     resp = Response(app.config['EXTERNAL_SCRIPT'] % (app.config['DOMAIN']),
         mimetype='text/javascript')
-    resp.set_cookie('user', 'test_cookie!')
+    resp.set_cookie('user', 'test_cookie!', secure=True)
     return resp
 
 @app.route('/getgif')
