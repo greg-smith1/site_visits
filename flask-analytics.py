@@ -4,7 +4,7 @@ import os
 from urllib.parse import parse_qsl, urlparse
 
 import sqlite3
-from flask import Flask, request, Response, abort
+from flask import Flask, request, Response, abort, make_response
 
 BEACON = b64decode('R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
 
@@ -53,17 +53,20 @@ class JSONField(TextField):
 
 @app.route('/servjs', methods=['GET'])
 def send_js():
-    return Response(app.config['EXTERNAL_SCRIPT'] % (app.config['DOMAIN']),
+    resp = Response(app.config['EXTERNAL_SCRIPT'] % (app.config['DOMAIN']),
         mimetype='text/javascript')
+    resp.set_cookie('user', 'test_cookie!')
+    return resp
 
 @app.route('/getgif')
 def gift():
     if not request.args.get('url'):
         abort(404)
 
+    cookie = request.cookies.get('user')
     parsed = urlparse(request.args['url'])
     params = dict(parse_qsl(parsed.query))
-    print('Request!')
+    print('Request from {}'.format(cookie))
     print('Netloc: ', parsed.netloc)
     print('Path: ', parsed.path)
     print('Args "t" :', request.args.get('t') or '')
