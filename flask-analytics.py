@@ -15,7 +15,7 @@ EXTERNAL_SCRIPT = """(function(){
     var d=document,i=new Image,e=encodeURIComponent;
     i.src='%s/getgif?url='+e(d.location.href)+'&ref='+e(d.referrer)+'&t='+e(d.title);
     })()""".replace('\n', '')
-DOMAIN = 'http://127.0.0.1:5000'
+DOMAIN = 'http://0.0.0.0:5000'
 
 
 app = Flask(__name__)
@@ -84,4 +84,4 @@ def not_found(error):
 
 
 if __name__=='__main__':
-    app.run(debug=True)
+    app.run('0.0.0.0', debug=True)
